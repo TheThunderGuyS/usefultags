@@ -6,10 +6,9 @@ function manageTypes(templateString, ...literals) {
     if (Array.isArray(templateString)) {
         let convertedString = "";
         //Loop over array, adding each value to a string
-        templateString.forEach(
-            (currentValue, index) =>
-                (convertedString += currentValue + (literals[index] || ""))
-        );
+        for (let index = 0; index < templateString.length; ++index) {
+            convertedString += templateString[index] + (literals[index] || "");
+        }
         return convertedString;
     }
 
@@ -20,7 +19,7 @@ export function stripIndent(templateString, ...literals) {
     const string = manageTypes(templateString, ...literals);
 
     //Find whitespace characters at the beginning of lines, fall back to empty array if falsey
-    const indentArray = string.match(/^[ \t]*?(?=\S)/gm) || [];
+    const indentArray = string.match(/^[ \t]*(?=\S)/gm) || [];
 
     //Get the number of whitespace characters
     const indents = indentArray.reduce(
@@ -31,7 +30,7 @@ export function stripIndent(templateString, ...literals) {
 
     return string
         .replace(new RegExp(`^[ \t]{${indents}}`, "gm"), "") //Trim whitespace
-        .replace(/^[ \t]+/g, "") //Trim the trailing first-line whitespace, if it exists
+        .replace(/^[ \t]+/, "") //Trim the trailing first-line whitespace, if it exists
         .replace(/^\n/, ""); //Trim the first newline
 }
 
@@ -48,7 +47,7 @@ export function oneLine(templateString, ...literals) {
 
     return string
         .replace(/^\s+/gm, " ") //Trim all excess whitespace, replacing them with one space
-        .replace(/^\s/g, "") //Trim the extra beginning space
+        .replace(/^\s/, "") //Trim the extra beginning space
         .replace(/\n/g, ""); //Trim all newlines
 }
 
